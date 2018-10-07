@@ -75,6 +75,7 @@ class SubscribeController extends Controller
 
         // 控制客户端最多获取节点数
         $scheme = '';
+        $ss_scheme = '';
         foreach ($nodeList as $key => $node) {
             // 控制显示的节点数
             if (self::$systemConfig['subscribe_max'] && $key >= self::$systemConfig['subscribe_max']) {
@@ -93,15 +94,21 @@ class SubscribeController extends Controller
             $ssr_str .= ':' . ($node['single'] ? $node['single_obfs'] : $user->obfs) . ':' . ($node['single'] ? base64url_encode($node['single_passwd']) : base64url_encode($user->passwd));
             $ssr_str .= '/?obfsparam=' . base64url_encode($obfs_param);
             $ssr_str .= '&protoparam=' . ($node['single'] ? base64url_encode($user->port . ':' . $user->passwd) : base64url_encode($protocol_param));
-            $ssr_str .= '&remarks=' . base64url_encode($node['name'] . "|" . $node['traffic_rate'] . "倍流量消耗");
+            $ssr_str .= '&remarks=' . base64url_encode($node['name']);
             $ssr_str .= '&group=' . base64url_encode(empty($group) ? '' : $group->name);
             $ssr_str .= '&udpport=0';
             $ssr_str .= '&uot=0';
             $ssr_str = base64url_encode($ssr_str);
             $scheme .= 'ssr://' . $ssr_str . "\n";
+
+            $ss_str = 'ss://';
+            $ss_str .= base64_encode(($node['single'] ? $node['single_method'] : $user->method) . ':' . $node['single'] ? $node['single_passwd'] : $user->passwd);
+            $ss_str .= '@' . ($node['server'] ? $node['server'] : $node['ip']) . ':' . ($node['single'] ? $node['single_port'] : $user->port);
+            $ss_str .= '/?#' . $node['name'];
+            $ss_scheme .= $ss_str . "\n";
         }
 
-        exit(base64url_encode($scheme));
+        exit("SS 复制这里:\n" . $ss_scheme . "SSR 复制这里:\n" . base64url_encode($scheme));
     }
 
     // 写入订阅访问日志
