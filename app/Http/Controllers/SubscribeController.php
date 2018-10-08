@@ -99,16 +99,16 @@ class SubscribeController extends Controller
             $ssr_str .= '&udpport=0';
             $ssr_str .= '&uot=0';
             $ssr_str = base64url_encode($ssr_str);
-            $scheme .= 'ssr://' . $ssr_str . "\n";
+            $scheme .= 'ssr://' . $ssr_str . "<br>";
 
             $ss_str = 'ss://';
             $ss_str .= base64_encode(($node['single'] ? $node['single_method'] : $user->method) . ':' . ($node['single'] ? $node['single_passwd'] : $user->passwd));
             $ss_str .= '@' . ($node['server'] ? $node['server'] : $node['ip']) . ':' . ($node['single'] ? $node['single_port'] : $user->port);
-            $ss_str .= '/?#' . $node['name'];
+            $ss_str .= '/?#' . urlencode($node['name']);
             $ss_scheme .= $ss_str . "\n";
         }
 
-        exit("SS 复制这里:\n" . $ss_scheme . "SSR 复制这里:\n" . base64url_encode($scheme));
+        exit("SS 复制这里:<br>" . $ss_scheme . "SSR 复制这里:<br>" . base64url_encode($scheme));
     }
 
     // 写入订阅访问日志
