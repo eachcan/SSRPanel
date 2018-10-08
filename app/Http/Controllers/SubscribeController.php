@@ -38,12 +38,12 @@ class SubscribeController extends Controller
         // 校验合法性
         $subscribe = UserSubscribe::query()->with('user')->where('code', $code)->where('status', 1)->first();
         if (empty($subscribe)) {
-            exit($this->noneNode());
+            exit($this->noneNode($request->query('mode')));
         }
 
         $user = User::query()->where('id', $subscribe->user_id)->whereIn('status', [0, 1])->where('enable', 1)->first();
         if (empty($user)) {
-            exit($this->noneNode());
+            exit($this->noneNode($request->query('mode')));
         }
 
         // 更新访问次数
@@ -55,7 +55,7 @@ class SubscribeController extends Controller
         // 获取这个账号可用节点
         $userLabelIds = UserLabel::query()->where('user_id', $user->id)->pluck('label_id');
         if (empty($userLabelIds)) {
-            exit($this->noneNode());
+            exit($this->noneNode($request->query('mode')));
         }
 
         $nodeList = SsNode::query()
@@ -67,7 +67,16 @@ class SubscribeController extends Controller
             ->get()
             ->toArray();
         if (empty($nodeList)) {
-            exit($this->noneNode());
+            if ($request->query('mode')) {
+                $nodeList = SsNode::query()
+                    ->leftjoin("ss_node_label", "ss_node.id", "=", "ss_node_label.node_id")
+                    ->whereIn('ss_node_label.label_id', $userLabelIds)
+                    ->groupBy('ss_node.id')
+                    ->get()
+                    ->toArray();
+                print_r($nodeList);
+            }
+            exit($this->noneNode($request->query('mode')));
         }
 
         // 打乱数组
