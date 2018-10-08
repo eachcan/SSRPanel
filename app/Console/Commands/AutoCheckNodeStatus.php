@@ -45,7 +45,7 @@ class AutoCheckNodeStatus extends Command
     {
         $title = "节点异常警告";
 
-        $nodeList = SsNode::query()->where('status', 1)->where('is_tcp_check', 1)->get();
+        $nodeList = SsNode::query()->where('is_tcp_check', 1)->get();
         foreach ($nodeList as $node) {
             $tcpCheck = $this->tcpCheck($node->ip);
             if (false !== $tcpCheck) {
@@ -92,6 +92,8 @@ class AutoCheckNodeStatus extends Command
                 }
 
                 Log::info("【TCP阻断检测】" . $node->name . ' - ' . $node->ip . ' - ' . $text);
+            } else {
+                SsNode::query()->where('id', $node->id)->update(['status' => 0]);
             }
 
             // 10分钟内无节点负载信息且TCP检测认为不是宕机则认为是SSR(R)后端炸了
