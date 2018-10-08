@@ -93,7 +93,9 @@ class AutoCheckNodeStatus extends Command
 
                 Log::info("【TCP阻断检测】" . $node->name . ' - ' . $node->ip . ' - ' . $text);
             } else {
-                SsNode::query()->where('id', $node->id)->update(['status' => 0]);
+                SsNode::query()->where('id', $node->id)->update(['status' => 1]);
+                Log::info("【TCP阻断检测】" . $node->name . ' - ' . $node->ip . ' - OK');
+                continue;
             }
 
             // 10分钟内无节点负载信息且TCP检测认为不是宕机则认为是SSR(R)后端炸了
@@ -103,7 +105,7 @@ class AutoCheckNodeStatus extends Command
             }
 
             // 天若有情天亦老，我为长者续一秒
-            sleep(1);
+//            sleep(1);
         }
     }
 
