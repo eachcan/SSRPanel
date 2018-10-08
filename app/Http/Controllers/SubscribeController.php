@@ -110,6 +110,9 @@ class SubscribeController extends Controller
 
         if ($request->query('mode') == 'ss') {
             echo "SS:<br>" . $ss_scheme;
+        } elseif ($request->query('mode') == 'debug') {
+            unset($user->password);
+            yaml_emit(['node' => $node, 'user' => $user]);
         } else {
             exit(base64url_encode($scheme));
         }
