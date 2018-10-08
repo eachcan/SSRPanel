@@ -108,7 +108,11 @@ class SubscribeController extends Controller
             $ss_scheme .= $ss_str . "\n";
         }
 
-        exit("SS 复制这里:<br>" . $ss_scheme . "SSR 复制这里:<br>" . base64url_encode($scheme));
+        if ($request->query('mode') == 'ss') {
+            echo "SS:<br>" . $ss_scheme;
+        } else {
+            exit(base64url_encode($scheme));
+        }
     }
 
     // 写入订阅访问日志
