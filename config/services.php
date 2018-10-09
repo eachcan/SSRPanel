@@ -15,8 +15,8 @@ return [
     */
 
     'mailgun' => [
-        'domain' => env('mg.myvpn.tk'),
-        'secret' => env('efc0adf7aaedd7f18b3526c4fbeca410-c8e745ec-6c93d23f'),
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
     ],
 
     'ses' => [

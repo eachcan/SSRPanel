@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'mailgun'),
+    'driver' => env('MAIL_DRIVER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('postmaster@mg.mailgun.tk'),
-        'name'    => env('MyVPN 客服'),
+        'address' => env('MAIL_FROM_ADDRESS'),
+        'name'    => env('MAIL_FROM_NAME'),
     ],
 
     /*
