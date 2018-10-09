@@ -40,7 +40,7 @@ class SendMail extends Command
     public function handle()
     {
         try {
-            Mail::to("eachcan@163.com")->send(new activeUser("网站名", "http://myvpn.tk/url"));
+            Mail::to("eachcan@163.com")->send(new activeUser("网站名", "http://myvpn.tk/a/" . mt_rand(10000, 99999)));
         } catch (\Exception $e) {
             echo $e->getTraceAsString();
         }
